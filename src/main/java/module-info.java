@@ -5,4 +5,10 @@ module com.visual.chess {
 
     opens com.visual.chess to javafx.fxml;
     exports com.visual.chess;
+    opens com.visual.chess.controllers to javafx.fxml;
+    exports com.visual.chess.controllers;
+
+//    opens com.visual.chess.controllers to javafx.fxml;
+//    exports com.visual.chess.controllers;
+
 }

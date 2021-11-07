@@ -10,7 +10,8 @@
 <?import java.net.URL?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0"
-      prefWidth="500" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" styleClass="bg-color">
+      prefWidth="500" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" styleClass="bg-color"
+      fx:controller="com.visual.chess.controllers.ChessController">
     <ImageView fitHeight="108.0" fitWidth="107.0" pickOnBounds="true" preserveRatio="true">
         <VBox.margin>
             <Insets left="199.5" top="35.0"/>
@@ -25,7 +26,8 @@
             <Font name="Roboto" size="23.0"/>
         </font>
     </Label>
-    <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="164.0" text="PLAY" fx:id="playButton">
+    <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="164.0" text="PLAY" fx:id="playButton"
+            onAction="#onPlayButtonClick">
         <VBox.margin>
             <Insets left="170.0" top="70.0" bottom="35"/>
         </VBox.margin>

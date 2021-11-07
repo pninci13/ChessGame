@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0"
+      prefWidth="500.0" styleClass="bg-color" xmlns="http://javafx.com/javafx/11.0.2"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.visual.chess.controllers.AnimationController">
+    <stylesheets>
+        <URL value="@../styles/main.css"/>
+    </stylesheets>
+    <Label alignment="CENTER" prefHeight="34.0" prefWidth="162.0" text="PLAYERS NAME" styleClass="labels">
+        <VBox.margin>
+            <Insets left="170.0" top="30.0"/>
+        </VBox.margin>
+        <font>
+            <Font name="Roboto Light" size="20.0" />
+        </font>
+    </Label>
+    <Label alignment="CENTER" prefHeight="20.0" prefWidth="120.0" text="PLAYER 1" textAlignment="CENTER">
+        <VBox.margin>
+            <Insets left="190.0" top="50.0"/>
+        </VBox.margin>
+        <font>
+            <Font name="Roboto Light" size="14.0"/>
+        </font>
+    </Label>
+    <TextField fx:id="player1TextField" alignment="CENTER" maxHeight="41.0" maxWidth="250.0" minHeight="-Infinity"
+               minWidth="-Infinity" prefHeight="35.0" prefWidth="0.0" styleClass="textFields">
+        <VBox.margin>
+            <Insets left="124.0"/>
+        </VBox.margin>
+        <font>
+            <Font size="10.0"/>
+        </font>
+    </TextField>
+    <Label alignment="CENTER" prefHeight="20.0" prefWidth="120.0" text="PLAYER 2" textAlignment="CENTER">
+        <font>
+            <Font name="Roboto Light" size="14.0"/>
+        </font>
+        <VBox.margin>
+            <Insets left="190.0" top="30.0"/>
+        </VBox.margin>
+    </Label>
+    <TextField fx:id="player2TextField" alignment="CENTER" maxHeight="41.0" maxWidth="250.0" minHeight="-Infinity"
+               minWidth="-Infinity" prefHeight="35.0" prefWidth="0.0" styleClass="textFields">
+        <VBox.margin>
+            <Insets left="124.0"/>
+        </VBox.margin>
+        <font>
+            <Font size="10.0"/>
+        </font>
+    </TextField>
+    <Button fx:id="goButton" mnemonicParsing="false" prefHeight="24.0" prefWidth="93.0" text="Go">
+        <VBox.margin>
+            <Insets left="203.0" top="35.0"/>
+        </VBox.margin>
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Button>
+</VBox>

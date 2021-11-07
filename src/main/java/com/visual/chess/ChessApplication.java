@@ -11,8 +11,8 @@ import java.util.Objects;
 
 public class ChessApplication extends Application {
     @Override
-    public void start(Stage stage){
-        try{
+    public void start(Stage stage) {
+        try {
             FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("main-view.fxml"));
             Scene landingScene = new Scene(fxmlLoader.load(), 500, 350);
             Image chessIcon = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("images/icon.png")));
@@ -23,7 +23,7 @@ public class ChessApplication extends Application {
             stage.setScene(landingScene);
             stage.show();
 
-        }catch (IOException exception){
+        } catch (IOException exception) {
             exception.printStackTrace();
         }
     }
