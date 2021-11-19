@@ -1,5 +1,6 @@
 package com.visual.chess.controllers;
 
+import com.visual.chess.ChessApplication;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +16,7 @@ public class ChessController {
 
     public void playersScreen(ActionEvent actionEvent) throws IOException {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/playersName-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("views/playersName-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 500, 350);
 
         stage.setResizable(false);
