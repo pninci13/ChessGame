@@ -5,18 +5,18 @@ import com.visual.chess.assets.Piece;
 public class Tile {
     private Piece piece = null;
 
-    public boolean isTileOccupied(){
-        if(getPiece() == null){
+    public boolean isTileOccupied() {
+        if (getPiece() == null) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
 
-    public Piece getPieceFromTile(){
-        if(isTileOccupied()){
+    public Piece getPieceFromTile() {
+        if (isTileOccupied()) {
             return piece;
-        }else{
+        } else {
             return null;
         }
     }

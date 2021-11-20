@@ -1,0 +1,20 @@
+#resetButton{
+    -fx-border-color: #314F14;
+    -fx-border-radius: 12;
+    -fx-background-color: #F5FCEDFF;
+    -fx-cursor: hand;
+}
+
+#drawButton{
+    -fx-border-color: #314F14;
+    -fx-border-radius: 12;
+    -fx-background-color: #F5FCEDFF;
+    -fx-cursor: hand;
+}
+
+#surrenderButton{
+    -fx-border-color: #314F14;
+    -fx-border-radius: 12;
+    -fx-background-color: #F5FCEDFF;
+    -fx-cursor: hand;
+}

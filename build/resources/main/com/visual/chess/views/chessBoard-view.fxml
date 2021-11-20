@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -31,10 +32,23 @@
                 <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
             </HBox.margin>
         </GridPane>
-      <Button mnemonicParsing="false" text="Button">
-         <HBox.margin>
-            <Insets left="207.0" top="116.0" />
-         </HBox.margin>
-      </Button>
+        <Button fx:id="resetButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" text="Reset">
+            <HBox.margin>
+                <Insets left="30.0" top="120.0" />
+            </HBox.margin>
+        </Button>
+        <Button fx:id="drawButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" text="Draw">
+            <HBox.margin>
+                <Insets left="35.0" top="120.0" />
+            </HBox.margin>
+        </Button>
+        <Button fx:id="surrenderButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" text="Surrender">
+            <HBox.margin>
+                <Insets left="35.0" top="120.0" />
+            </HBox.margin>
+        </Button>
     </children>
+    <stylesheets>
+        <URL value="@../styles/board.css" />
+    </stylesheets>
 </HBox>

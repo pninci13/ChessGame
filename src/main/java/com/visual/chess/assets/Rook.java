@@ -1,59 +1,128 @@
 package com.visual.chess.assets;
+
 import com.visual.chess.controllers.ChessBoardController;
 import com.visual.chess.assets.Tile;
 
 public class Rook extends Piece {
+
     public Rook(int color) {
         super(color);
     }
 
     @Override
-    public boolean canMove(int changeXPosition, int changeYPosition){
-        int rookCurrentRow = ChessBoardController.currentRow;
-        int rookCurrentColumn = ChessBoardController.currentColumn;
-        int rookTargetRow = ChessBoardController.targetRow;
-        int rookTargetColumn = ChessBoardController.targetColumn;
+    public boolean canMove(Coordinate destination) {
+        int rookCurrentRow, rookCurrentColumn;
+        int rookTargetRow = destination.getRow();
+        int rookTargetColumn = destination.getColumn();
+
+        Coordinate source = getCoordinate();
+        rookCurrentRow = source.getRow();
+        rookCurrentColumn = source.getColumn();
+
+        int changeXPosition = rookTargetRow - rookCurrentRow;
+        int changeYPosition = rookTargetColumn - rookCurrentColumn;
+
         Tile[][] tiles = ChessBoardController.tileMatrix;
 
-        System.out.println("deltax = " + Math.abs(changeXPosition));
-        System.out.println("deltay = " + Math.abs(changeYPosition));
-        System.out.println("linha = " + rookTargetRow);
-        System.out.println("coluna = " + rookTargetColumn);
-
-        if(tiles[rookCurrentRow][rookCurrentColumn].getPiece().getColor() == 1) {
-            for (int i = 0; i < 7; i++) {
-                if ((tiles[i][rookCurrentRow].getPiece() != null) && (Math.abs(changeXPosition) >= i)) {
-                    return false;
+        if (rookCurrentRow == rookTargetRow) {
+            if (changeYPosition > 0) {
+                for (int i = rookCurrentColumn + 1; i < rookTargetColumn; i++) {
+                    if (tiles[rookCurrentRow][i].getPiece() != null) {
+                        return false;
+                    }
                 }
+
+                if (tiles[rookTargetRow][rookTargetColumn].getPiece() != null) {
+                    if (tiles[rookCurrentRow][rookCurrentColumn].getPiece().getColor() != tiles[rookTargetRow][rookTargetColumn].getPiece().getColor()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                return true;
             }
 
-            for (int j = 0; j < 7; j++) {
-                if ((tiles[rookCurrentRow][j].getPiece() != null) && (Math.abs(changeXPosition) >= j)) {
-                    return false;
+            if (changeYPosition < 0) {
+                for (int i = rookCurrentColumn - 1; i > rookTargetColumn; i--) {
+                    if (tiles[rookCurrentRow][i].getPiece() != null) {
+                        return false;
+                    }
                 }
+
+                if (tiles[rookTargetRow][rookTargetColumn].getPiece() != null) {
+                    if (tiles[rookCurrentRow][rookCurrentColumn].getPiece().getColor() != tiles[rookTargetRow][rookTargetColumn].getPiece().getColor()) {
+                        return true;
+
+                    } else {
+                        return false;
+                    }
+                }
+
+                return true;
             }
         }
 
-        if((rookCurrentRow == rookTargetRow) || (rookCurrentColumn == rookTargetColumn)){
-//            for (int i = 0; i < 8; i++) {
-//                if(tiles[rookCurrentRow][i].getPiece() != null){
-//                    return false;
-//                }
-//            }
+        if (rookCurrentColumn == rookTargetColumn) {
+            if (changeXPosition > 0) {
+                for (int i = rookCurrentRow + 1; i < rookTargetRow; i++) {
+                    if (tiles[i][rookCurrentColumn].getPiece() != null) {
+                        return false;
+                    }
+                }
 
+                if (tiles[rookTargetRow][rookTargetColumn].getPiece() != null) {
+                    if (tiles[rookCurrentRow][rookCurrentColumn].getPiece().getColor() != tiles[rookTargetRow][rookTargetColumn].getPiece().getColor()) {
+                        return true;
 
-            System.out.println("Se mexe torre");
-            return true;
-        }else{
-            System.out.println("torre n mexeu");
-            return false;
+                    } else {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            if (changeXPosition < 0) {
+                for (int i = rookCurrentRow - 1; i > rookTargetRow; i--) {
+                    if (tiles[i][rookCurrentColumn].getPiece() != null) {
+                        return false;
+                    }
+                }
+
+                if (tiles[rookTargetRow][rookTargetColumn].getPiece() != null) {
+                    if (tiles[rookCurrentRow][rookCurrentColumn].getPiece().getColor() != tiles[rookTargetRow][rookTargetColumn].getPiece().getColor()) {
+                        return true;
+
+                    } else {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
         }
 
+        return false;
     }
 
-//    @Override
-//    public void showPath() {
-//
-//    }
+    @Override
+    public boolean canEat(Coordinate destination) {
+        int rookCurrentRow, rookCurrentColumn;
+        int rookTargetRow = destination.getRow();
+        int rookTargetColumn = destination.getColumn();
 
+        Coordinate source = getCoordinate();
+        rookCurrentRow = source.getRow();
+        rookCurrentColumn = source.getColumn();
+
+        Tile[][] tiles = ChessBoardController.tileMatrix;
+
+        if (tiles[rookTargetRow][rookTargetColumn].getPiece() != null) {
+            if (tiles[rookCurrentRow][rookCurrentColumn].getPiece().getColor() != tiles[rookTargetRow][rookTargetColumn].getPiece().getColor())
+                return true;
+        }
+        return false;
+
+    }
 }

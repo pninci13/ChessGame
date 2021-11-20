@@ -12,15 +12,13 @@ import javafx.scene.layout.GridPane;
 
 public class ChessBoardController {
 
-    public static int currentRow, currentColumn;
+    public int currentRow, currentColumn;
     public static int targetRow, targetColumn, sourceToTarget;
-    int changeXPosition, changeYPosition;
+    public static int changeXPosition, changeYPosition;
     Node currentNode, targetNode;
 
     static Button[][] buttonMatrix = new Button[8][8];
     public static Tile[][] tileMatrix = new Tile[8][8];
-
-    //matriz de imageView
 
     @FXML
     public GridPane chessBoard;
@@ -45,6 +43,9 @@ public class ChessBoardController {
                 }
             }
         }
+
+        allNextMoves();
+
     }
 
     public void whitePieces(int i, int j) {
@@ -56,7 +57,9 @@ public class ChessBoardController {
             button = addPieces(button, url);
             chessBoard.add(button, j, 6);
             buttonMatrix[6][j] = button;
-            tileMatrix[6][j].setPiece(new Pawn(Piece.WHITE));
+            Pawn pawn = new Pawn(Piece.WHITE);
+            pawn.setCoordinate(i, j);
+            tileMatrix[6][j].setPiece(pawn);
         }
 
         if (i == 7) {
@@ -66,7 +69,9 @@ public class ChessBoardController {
                 button = addPieces(button, url);
                 chessBoard.add(button, j, 7);
                 buttonMatrix[7][j] = button;
-                tileMatrix[7][j].setPiece(new Rook(Piece.WHITE));
+                Rook rook = new Rook(Piece.WHITE);
+                rook.setCoordinate(i, j);
+                tileMatrix[7][j].setPiece(rook);
             }
 
             if (j == 1 || j == 6) {
@@ -75,7 +80,9 @@ public class ChessBoardController {
                 button = addPieces(button, url);
                 chessBoard.add(button, j, 7);
                 buttonMatrix[7][j] = button;
-                tileMatrix[7][j].setPiece(new Knight(Piece.WHITE));
+                Knight knight = new Knight(Piece.WHITE);
+                knight.setCoordinate(i, j);
+                tileMatrix[7][j].setPiece(knight);
             }
 
             if (j == 2 || j == 5) {
@@ -84,7 +91,9 @@ public class ChessBoardController {
                 button = addPieces(button, url);
                 chessBoard.add(button, j, 7);
                 buttonMatrix[7][j] = button;
-                tileMatrix[7][j].setPiece(new Bishop(Piece.WHITE));
+                Bishop bishop = new Bishop(Piece.WHITE);
+                bishop.setCoordinate(i, j);
+                tileMatrix[7][j].setPiece(bishop);
             }
 
             if (j == 3) {
@@ -93,7 +102,9 @@ public class ChessBoardController {
                 button = addPieces(button, url);
                 chessBoard.add(button, j, 7);
                 buttonMatrix[7][j] = button;
-                tileMatrix[7][j].setPiece(new Queen(Piece.WHITE));
+                Queen queen = new Queen(Piece.WHITE);
+                queen.setCoordinate(i, j);
+                tileMatrix[7][j].setPiece(queen);
             }
 
             if (j == 4) {
@@ -102,7 +113,9 @@ public class ChessBoardController {
                 button = addPieces(button, url);
                 chessBoard.add(button, j, 7);
                 buttonMatrix[7][j] = button;
-                tileMatrix[7][j].setPiece(new King(Piece.WHITE));
+                King king = new King(Piece.WHITE);
+                king.setCoordinate(i, j);
+                tileMatrix[7][j].setPiece(king);
             }
         }
     }
@@ -116,7 +129,9 @@ public class ChessBoardController {
             button = addPieces(button, url);
             chessBoard.add(button, j, 1);
             buttonMatrix[1][j] = button;
-            tileMatrix[1][j].setPiece(new Pawn(Piece.BLACK));
+            Pawn pawn = new Pawn(Piece.BLACK);
+            pawn.setCoordinate(i, j);
+            tileMatrix[i][j].setPiece(pawn);
         }
 
         if (i == 0) {
@@ -126,7 +141,9 @@ public class ChessBoardController {
                 button = addPieces(button, url);
                 chessBoard.add(button, j, 0);
                 buttonMatrix[0][j] = button;
-                tileMatrix[0][j].setPiece(new Rook(Piece.BLACK));
+                Rook rook = new Rook(Piece.BLACK);
+                rook.setCoordinate(i, j);
+                tileMatrix[i][j].setPiece(rook);
             }
 
             if (j == 1 || j == 6) {
@@ -135,7 +152,9 @@ public class ChessBoardController {
                 button = addPieces(button, url);
                 chessBoard.add(button, j, 0);
                 buttonMatrix[0][j] = button;
-                tileMatrix[0][j].setPiece(new Knight(Piece.BLACK));
+                Knight knight = new Knight(Piece.BLACK);
+                knight.setCoordinate(i, j);
+                tileMatrix[i][j].setPiece(knight);
             }
 
             if (j == 2 || j == 5) {
@@ -144,7 +163,9 @@ public class ChessBoardController {
                 button = addPieces(button, url);
                 chessBoard.add(button, j, 0);
                 buttonMatrix[0][j] = button;
-                tileMatrix[0][j].setPiece(new Bishop(Piece.BLACK));
+                Bishop bishop = new Bishop(Piece.BLACK);
+                bishop.setCoordinate(i, j);
+                tileMatrix[i][j].setPiece(bishop);
             }
 
             if (j == 3) {
@@ -153,7 +174,9 @@ public class ChessBoardController {
                 button = addPieces(button, url);
                 chessBoard.add(button, j, 0);
                 buttonMatrix[0][j] = button;
-                tileMatrix[0][j].setPiece(new Queen(Piece.BLACK));
+                Queen queen = new Queen(Piece.BLACK);
+                queen.setCoordinate(i, j);
+                tileMatrix[i][j].setPiece(queen);
             }
 
             if (j == 4) {
@@ -162,7 +185,9 @@ public class ChessBoardController {
                 button = addPieces(button, url);
                 chessBoard.add(button, j, 0);
                 buttonMatrix[0][j] = button;
-                tileMatrix[0][j].setPiece(new King(Piece.BLACK));
+                King king = new King(Piece.BLACK);
+                king.setCoordinate(i, j);
+                tileMatrix[i][j].setPiece(king);
             }
         }
     }
@@ -222,6 +247,7 @@ public class ChessBoardController {
             currentNode = node;
             currentRow = toIndex(GridPane.getRowIndex(node));
             currentColumn = toIndex(GridPane.getColumnIndex(node));
+
             System.out.println(tileMatrix[currentRow][currentColumn].getPiece());
             if (getTile().getPiece() != null) {
                 showPath(getTile().getPiece());
@@ -233,12 +259,28 @@ public class ChessBoardController {
             targetRow = toIndex(GridPane.getRowIndex(node));
             targetColumn = toIndex(GridPane.getColumnIndex(node));
 
+            Coordinate destination = new Coordinate(targetRow, targetColumn);
+
             getDeltaCoordinates();
             if (targetNode != currentNode) {
                 removePath();
-                if (getTile().getPiece().canMove(changeXPosition, changeYPosition)) {
-                    System.out.println(tileMatrix[currentRow][currentColumn].getPiece());
-                    move();
+                if (getTile().getPiece().canMove(destination)) {
+                    System.out.println(tileMatrix[targetRow][targetColumn].getPiece());
+                    move(destination);
+
+                    clearNextMoves();
+                    allNextMoves();
+
+//                    for (int i = 0; i < 8; i++) {
+//                        for (int j = 0; j < 8; j++) {
+//                            if((tileMatrix[i][j].getPiece() != null) && !(tileMatrix[i][j].getPiece().getNextMoves().isEmpty())){
+//                                for (int k = 0; k < tileMatrix[i][j].getPiece().getNextMoves().size(); k++) {
+//                                    System.out.println("---- " + i + ", " + j + " ----");
+//                                    System.out.println(tileMatrix[i][j].getPiece().getNextMoves().get(k).getRow() + ", " + tileMatrix[i][j].getPiece().getNextMoves().get(k).getColumn());
+//                                }
+//                            }
+//                        }
+//                    }
                 }
 
                 sourceToTarget = 0;
@@ -247,17 +289,31 @@ public class ChessBoardController {
                 sourceToTarget = 0;
                 removePath();
             }
-
         }
     }
 
-    public void move() {
+    public void clearNextMoves() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (tileMatrix[i][j].getPiece() != null) {
+                    tileMatrix[i][j].getPiece().getNextMoves().clear();
+                }
+            }
+        }
+    }
+
+    public void move(Coordinate destination) {
 //        chessBoard.getChildren().remove(targetNode);
 //        chessBoard.getChildren().remove(currentNode);
 //        chessBoard.add(currentNode, targetColumn, targetRow);
 
+        int targetRow = destination.getRow();
+        int targetColumn = destination.getColumn();
+
         Tile tile = new Tile();
         tileMatrix[targetRow][targetColumn] = tileMatrix[currentRow][currentColumn];
+        tileMatrix[targetRow][targetColumn].getPiece().setCoordinate(targetRow, targetColumn);
+        tileMatrix[targetRow][targetColumn].getPiece().setWasMoved(true);
         tileMatrix[currentRow][currentColumn] = tile;
 
         Button button = createNewButton(currentRow, currentColumn);
@@ -273,167 +329,25 @@ public class ChessBoardController {
         changeYPosition = targetColumn - currentColumn;
     }
 
-    public boolean isChessboardLimit(int value1, int value2) {
-        if (value1 == -1 || value1 == 8 || value2 == -1 || value2 == 8) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public void showPath(Piece piece) {
-//        int currentRow2 = currentRow;
-//        int currentColumn2 = currentColumn;
-//        int targetRow2 = targetRow;
-//        int targetColumn2 = targetColumn;
-//        Node node = currentNode;
-
-        if (piece instanceof Pawn)
-            showPawnPossibleMoves();
-
-        if (piece instanceof Rook)
-            showRookPossibleMoves();
-    }
-
     public Tile getTile() {
         return tileMatrix[currentRow][currentColumn];
     }
 
-    public void showPawnPossibleMoves() {
-        int i = 1;
-
-        if (getTile().getPiece().getColor() == Piece.WHITE) {
-            i = -1;
-        }
-
-        int sum1 = currentRow + i;
-        int sum2 = currentRow + 2 * i;
-
-        if (isChessboardLimit(sum1, sum2)) {
-            return;
-        }
-
-        if (getTile().getPiece() instanceof Pawn) {
-//            if(tileMatrix[currentRow + i][currentColumn + i].getPiece() != null){
-////                Button button = createNewButton(currentRow + i, currentColumn + i);
-////                button.getStylesheets().add("/com/styles/styles.css");
-////                button.setId("enemyFound");
-//
-////                buttonMatrix[currentRow + i][currentColumn + i] = button;
-////                chessBoard.add(button, currentColumn + i, currentRow + i);
-//                System.out.println("alou");
-////                buttonMatrix[currentRow + i][currentColumn + i].setId("enemyFound");
-////                buttonMatrix[currentRow + i][currentColumn + i].getStylesheets().add("/com/styles/styles.css");
-//            }
-
-//            if(tileMatrix[currentRow + i][currentColumn - i].getPiece() != null){
-//                System.out.println("olar");
-////                buttonMatrix[currentRow + i][currentColumn + i].getStylesheets().add("/com/styles/styles.css");
-//            }
-
-            if ((!((Pawn) getTile().getPiece()).wasMoved)) {
-                if ((tileMatrix[currentRow + i][currentColumn].getPiece() == null) && (tileMatrix[currentRow + 2 * i][currentColumn].getPiece() == null)) {
-                    Button button = createNewButton(0, 0);
-                    button = addPossibleMoves(button);
-                    buttonMatrix[currentRow + i][currentColumn].setGraphic(button.getGraphic());
-                    buttonMatrix[currentRow + i][currentColumn].setId("possibleMove");
-
-                    button = createNewButton(0, 0);
-                    button = addPossibleMoves(button);
-                    buttonMatrix[currentRow + 2 * i][currentColumn].setGraphic(button.getGraphic());
-                    buttonMatrix[currentRow + 2 * i][currentColumn].setId("possibleMove");
-
-                } else {
-                    Button button = createNewButton(0, 0);
-                    button = addPossibleMoves(button);
-                    buttonMatrix[currentRow + i][currentColumn].setGraphic(button.getGraphic());
-                    buttonMatrix[currentRow + i][currentColumn].setId("possibleMove");
+    public void showPath(Piece piece) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Coordinate destination = new Coordinate(i, j);
+                if (piece.canMove(destination)) {
+                    if (!piece.canEat(destination)) {
+                        Button button = createNewButton(0, 0);
+                        button = addPossibleMoves(button);
+                        buttonMatrix[destination.getRow()][destination.getColumn()].setGraphic(button.getGraphic());
+                        buttonMatrix[destination.getRow()][destination.getColumn()].setId("possibleMove");
+                        //buttonMatrix[destination.getRow()][destination.getColumn()].getStyleClass().add("")
+                    }
                 }
-            } else if ((tileMatrix[currentRow + i][currentColumn].getPiece() == null)) {
-                Button button = createNewButton(0, 0);
-                button = addPossibleMoves(button);
-                buttonMatrix[currentRow + i][currentColumn].setGraphic(button.getGraphic());
-                buttonMatrix[currentRow + i][currentColumn].setId("possibleMove");
             }
         }
-
-    }
-
-    public void showRookPossibleMoves() {
-
-        for (int i = 1; i < 8; i++) {
-            if (!isChessboardLimit(currentRow, currentColumn + i)) {
-                System.out.println("11111");
-                System.out.println(tileMatrix[currentRow][currentColumn + i].getPiece());
-                if (tileMatrix[currentRow][currentColumn + i].getPiece() == null) {
-                    System.out.println("AAAAAA");
-                    Button button = createNewButton(0, 0);
-                    button = addPossibleMoves(button);
-                    buttonMatrix[currentRow][currentColumn + i].setGraphic(button.getGraphic());
-                    buttonMatrix[currentRow][currentColumn + i].setId("possibleMove");
-                } else {
-                    break;
-                }
-            } else {
-                break;
-            }
-        }
-
-        for (int i = 1; i < 8; i++) {
-            if (!isChessboardLimit(currentRow, currentColumn - i)) {
-                System.out.println("22222");
-                System.out.println(tileMatrix[currentRow][currentColumn - i].getPiece());
-                if (tileMatrix[currentRow][currentColumn - i].getPiece() == null) {
-                    System.out.println("BBBBB");
-                    Button button = createNewButton(0, 0);
-                    button = addPossibleMoves(button);
-                    buttonMatrix[currentRow][currentColumn - i].setGraphic(button.getGraphic());
-                    buttonMatrix[currentRow][currentColumn - i].setId("possibleMove");
-                } else {
-                    break;
-                }
-            } else {
-                break;
-            }
-        }
-
-        for (int i = 1; i < 8; i++) {
-            if (!isChessboardLimit(currentRow + i, currentColumn)) {
-                System.out.println("33333");
-                System.out.println(tileMatrix[currentRow + i][currentColumn].getPiece());
-                if (tileMatrix[currentRow + i][currentColumn].getPiece() == null) {
-                    System.out.println("CCCCC");
-                    Button button = createNewButton(0, 0);
-                    button = addPossibleMoves(button);
-                    buttonMatrix[currentRow + i][currentColumn].setGraphic(button.getGraphic());
-                    buttonMatrix[currentRow + i][currentColumn].setId("possibleMove");
-                } else {
-                    break;
-                }
-            } else {
-                break;
-            }
-        }
-
-        for (int i = 1; i < 8; i++) {
-            if (!isChessboardLimit(currentRow - i, currentColumn)) {
-                System.out.println("44444");
-                System.out.println(tileMatrix[currentRow - i][currentColumn].getPiece());
-                if (tileMatrix[currentRow - i][currentColumn].getPiece() == null) {
-                    System.out.println("DDDDD");
-                    Button button = createNewButton(0, 0);
-                    button = addPossibleMoves(button);
-                    buttonMatrix[currentRow - i][currentColumn].setGraphic(button.getGraphic());
-                    buttonMatrix[currentRow - i][currentColumn].setId("possibleMove");
-                } else {
-                    break;
-                }
-            } else {
-                break;
-            }
-        }
-
-
     }
 
     public void removePath() {
@@ -447,4 +361,31 @@ public class ChessBoardController {
         }
     }
 
+    public void allNextMoves() {
+        Tile[][] auxMatrix = new Tile[8][8];
+
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                auxMatrix[i][j] = tileMatrix[i][j];
+            }
+        }
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (auxMatrix[i][j].getPiece() != null) {
+                    for (int k = 0; k < 8; k++) {
+                        for (int l = 0; l < 8; l++) {
+                            Coordinate destination = new Coordinate(k, l);
+                            if (auxMatrix[i][j].getPiece().canMove(destination)) {
+                                System.out.println(i + ", " + j + " ----> " + destination.getRow() + ", " + destination.getColumn());
+                                auxMatrix[i][j].getPiece().getNextMoves().add(destination);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println("\n\n\n\n");
+    }
 }
