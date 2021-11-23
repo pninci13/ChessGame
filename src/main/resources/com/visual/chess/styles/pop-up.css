@@ -1,0 +1,39 @@
+#yesButton{
+    -fx-background-color: #F5FCEDFF;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #314F14;
+    -fx-cursor: hand;
+}
+
+#noButton{
+    -fx-background-color: #f1b7b7;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #DC1C13;
+    -fx-cursor: hand;
+}
+
+#yesButton:hover{
+    -fx-cursor: hand;
+    -fx-border-radius: 12;
+    -fx-background-color: #314F14;
+    -fx-background-radius: 12;
+    -fx-text-fill: white;
+    -fx-border-color: #314F14;
+}
+
+#noButton:hover{
+    -fx-cursor: hand;
+    -fx-border-radius: 12;
+    -fx-background-color: #DC1C13;
+    -fx-background-radius: 12;
+    -fx-text-fill: white;
+    -fx-border-color: #DC1C13;
+}
+
+#popUpStage{
+    -fx-border-color: black;
+    -fx-background-color: #e2e0e0;
+    -fx-border-width: 2;
+}

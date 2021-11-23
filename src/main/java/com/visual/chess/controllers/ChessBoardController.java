@@ -1,20 +1,40 @@
 package com.visual.chess.controllers;
 
+import com.visual.chess.ChessApplication;
 import com.visual.chess.assets.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
+import java.io.IOException;
+import java.util.Objects;
 
 public class ChessBoardController {
 
     public int currentRow, currentColumn;
     public static int targetRow, targetColumn, sourceToTarget;
     public static int changeXPosition, changeYPosition;
+
+    @FXML
+    private Button surrenderButton;
+
+    @FXML
+    private Button drawButton;
+
+    @FXML
+    private Button resetButton;
+
     Node currentNode, targetNode;
 
     static Button[][] buttonMatrix = new Button[8][8];
@@ -23,9 +43,7 @@ public class ChessBoardController {
     @FXML
     public GridPane chessBoard;
 
-    @FXML
     public void initialize() {
-
         chessBoard.isGridLinesVisible();
 
         for (int i = 0; i < 8; i++) {
@@ -43,9 +61,6 @@ public class ChessBoardController {
                 }
             }
         }
-
-        allNextMoves();
-
     }
 
     public void whitePieces(int i, int j) {
@@ -250,6 +265,7 @@ public class ChessBoardController {
 
             System.out.println(tileMatrix[currentRow][currentColumn].getPiece());
             if (getTile().getPiece() != null) {
+                allNextMoves();
                 showPath(getTile().getPiece());
                 sourceToTarget = 1;
             }
@@ -387,5 +403,27 @@ public class ChessBoardController {
             }
         }
         System.out.println("\n\n\n\n");
+    }
+
+    @FXML
+    public void onResetButtonClick(){
+        try{
+            Stage stage = new Stage();
+            FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("views/resetPopUp.fxml"));
+            Scene alertPopUp = new Scene(fxmlLoader.load(), 400, 300);
+            Image alertIcon = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("images/alert.png")));
+
+            stage.getIcons().add(alertIcon);
+            stage.setResizable(false);
+            stage.setTitle("ALERT");
+            stage.setScene(alertPopUp);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.show();
+           // initialize();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 }
