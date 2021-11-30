@@ -14,7 +14,7 @@
             </font>
         </Label>
         <Button fx:id="yesButton" layoutX="77.0" layoutY="167.0" mnemonicParsing="false" prefHeight="50.0"
-                prefWidth="100.0" text="Yes"/>
+                prefWidth="100.0" text="Yes" onAction="#onYesButtonClick"/>
         <Button fx:id="noButton" layoutX="223.0" layoutY="167.0" mnemonicParsing="false" onAction="#onNoButtonClick"
                 prefHeight="50.0" prefWidth="100.0" text="No"/>
     </children>

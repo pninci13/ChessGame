@@ -49,7 +49,7 @@
         </Button>
 
         <Button fx:id="drawButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0"
-                text="Draw">
+                text="Draw" onAction="#onDrawButtonClick">
             <graphic>
                 <ImageView fitHeight="32.0" fitWidth="32.0">
                     <Image url="@../images/handshake.png"/>

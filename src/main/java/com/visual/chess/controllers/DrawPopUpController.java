@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ResetPopUpController {
+public class DrawPopUpController {
     public Button yesButton;
     public Button noButton;
     public Pane popUpStage;
@@ -31,7 +31,7 @@ public class ResetPopUpController {
 
     @FXML
     public void onNoButtonClick(ActionEvent actionEvent){
-       Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-       stage.close();
-   }
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
+    }
 }

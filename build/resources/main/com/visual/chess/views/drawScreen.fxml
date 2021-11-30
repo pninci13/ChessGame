@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import java.net.URL?>
+<Pane prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.2"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.visual.chess.controllers.DrawScreenController" fx:id="drawBG">
+    <children>
+        <Label graphicTextGap="5.0" layoutX="36.0" layoutY="75.0" text="T E S T A N D O ">
+        </Label>
+    </children>
+
+    <stylesheets>
+        <URL value="@../styles/drawScreen.css"/>
+    </stylesheets>
+</Pane>

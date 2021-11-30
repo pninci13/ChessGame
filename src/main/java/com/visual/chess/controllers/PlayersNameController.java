@@ -26,8 +26,12 @@ public class PlayersNameController {
         stage.show();
     }
 
+    public static Stage boardStage;
+
     public void boardScreen(ActionEvent actionEvent) throws IOException {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+        boardStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("views/chessBoard-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1300, 800);
 

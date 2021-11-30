@@ -1,6 +1,7 @@
 package com.visual.chess.controllers;
 
 import com.visual.chess.ChessApplication;
+import com.visual.chess.ConfirmationListener;
 import com.visual.chess.assets.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -406,24 +408,96 @@ public class ChessBoardController {
     }
 
     @FXML
-    public void onResetButtonClick(){
-        try{
+    public void onResetButtonClick(ActionEvent actionEvent) {
+        try {
             Stage stage = new Stage();
             FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("views/resetPopUp.fxml"));
-            Scene alertPopUp = new Scene(fxmlLoader.load(), 400, 300);
-            Image alertIcon = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("images/alert.png")));
+            Parent parent = fxmlLoader.load();
+            ResetPopUpController resetPopUpController = fxmlLoader.getController();
+            resetPopUpController.setConfirmationListener(new ConfirmationListener() {
+                @Override
+                public void onYesClick() {
+                    PlayersNameController.boardStage.close();
 
+                    try {
+                        FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("views/playersName-view.fxml"));
+                        Scene scene = new Scene(fxmlLoader.load(), 500, 350);
+
+                        Stage chessBoardStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+                        chessBoardStage.setResizable(false);
+                        chessBoardStage.setTitle("VP Chess");
+                        chessBoardStage.setScene(scene);
+                        chessBoardStage.centerOnScreen();
+                        chessBoardStage.show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            Scene alertPopUp = new Scene(parent, 400, 300);
+
+            Image alertIcon = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("images/alert.png")));
             stage.getIcons().add(alertIcon);
+
             stage.setResizable(false);
             stage.setTitle("ALERT");
             stage.setScene(alertPopUp);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
-            stage.show();
-           // initialize();
+            stage.showAndWait();
 
         } catch (IOException exception) {
             exception.printStackTrace();
         }
     }
+
+    @FXML
+    public void onDrawButtonClick(ActionEvent actionEvent){
+        try {
+            Stage stage = new Stage();
+            FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("views/drawPopUp.fxml"));
+            Parent parent = fxmlLoader.load();
+            DrawPopUpController drawPopUpController = fxmlLoader.getController();
+            drawPopUpController.setConfirmationListener(new ConfirmationListener() {
+                @Override
+                public void onYesClick() {
+                    //DrawScreenController.boardStageSecond.close();
+
+                    try {
+                        FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("views/drawScreen.fxml"));
+                        Scene scene = new Scene(fxmlLoader.load(), 500, 350);
+
+                        Stage drawStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+                        drawStage.setTitle("VP Chess");
+                        drawStage.setResizable(false);
+                        drawStage.setScene(scene);
+                        drawStage.centerOnScreen();
+                        drawStage.show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            Scene alertPopUp = new Scene(parent, 400, 300);
+
+            Image alertIcon = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("images/alert.png")));
+            stage.getIcons().add(alertIcon);
+
+            stage.setResizable(false);
+            stage.setTitle("ALERT");
+            stage.setScene(alertPopUp);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.showAndWait();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
 }
