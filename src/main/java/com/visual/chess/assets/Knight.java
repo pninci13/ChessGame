@@ -47,6 +47,11 @@ public class Knight extends Piece {
     }
 
     @Override
+    public boolean canMoveToBlock(Coordinate destination){
+        return false;
+    }
+
+    @Override
     public boolean canEat(Coordinate destination) {
         int knightCurrentRow, knightCurrentColumn;
         int knightTargetRow = destination.getRow();
@@ -60,6 +65,10 @@ public class Knight extends Piece {
         int changeYPosition = knightTargetColumn - knightCurrentColumn;
 
         Tile[][] tiles = ChessBoardController.tileMatrix;
+
+        if (!canMove(destination)){
+            return false;
+        }
 
         if (tiles[knightTargetRow][knightTargetColumn].getPiece() != null) {
             if (tiles[knightTargetRow][knightTargetColumn].getPiece().getColor() != tiles[knightCurrentRow][knightCurrentColumn].getPiece().getColor()) {

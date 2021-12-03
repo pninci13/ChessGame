@@ -24,9 +24,7 @@ public class King extends Piece {
 
         Tile[][] tiles = ChessBoardController.tileMatrix;
 
-        if ((Math.abs(changeXPosition) == 1 && Math.abs(changeYPosition) == 0) ||
-        (Math.abs(changeXPosition) == 0 && Math.abs(changeYPosition) == 1) ||
-        (Math.abs(changeXPosition) == 1 && Math.abs(changeYPosition) == 1)){
+        if ((Math.abs(changeXPosition) == 1 && Math.abs(changeYPosition) == 0) || (Math.abs(changeXPosition) == 0 && Math.abs(changeYPosition) == 1) || (Math.abs(changeXPosition) == 1 && Math.abs(changeYPosition) == 1)) {
             if (tiles[kingTargetRow][kingTargetColumn].getPiece() != null) {
                 if (tiles[kingCurrentRow][kingCurrentColumn].getPiece().getColor() != tiles[kingTargetRow][kingTargetColumn].getPiece().getColor()) {
                     return true;
@@ -37,6 +35,11 @@ public class King extends Piece {
                 return true;
             }
         }
+        return false;
+    }
+
+    @Override
+    public boolean canMoveToBlock(Coordinate destination) {
         return false;
     }
 
@@ -52,11 +55,15 @@ public class King extends Piece {
 
         Tile[][] tiles = ChessBoardController.tileMatrix;
 
-        if (tiles[kingTargetRow][kingTargetColumn].getPiece() != null) {
-            if (tiles[kingCurrentRow][kingCurrentColumn].getPiece().getColor() != tiles[kingTargetRow][kingTargetColumn].getPiece().getColor())
-                return true;
+        if (!canMove(destination)) {
+            return false;
         }
 
+        if (tiles[kingTargetRow][kingTargetColumn].getPiece() != null) {
+            if (tiles[kingCurrentRow][kingCurrentColumn].getPiece().canMove(destination))
+                if (tiles[kingCurrentRow][kingCurrentColumn].getPiece().getColor() != tiles[kingTargetRow][kingTargetColumn].getPiece().getColor())
+                    return true;
+        }
         return false;
     }
 }

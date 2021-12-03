@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -27,6 +28,8 @@ public class ChessBoardController {
     public int currentRow, currentColumn;
     public static int targetRow, targetColumn, sourceToTarget;
     public static int changeXPosition, changeYPosition;
+    public Label vezDeLabel;
+    public static int fiftyMoves = 0, piecesAmount = 0;
 
     @FXML
     private Button surrenderButton;
@@ -257,20 +260,24 @@ public class ChessBoardController {
 
     }
 
-    public void getCoordinates(ActionEvent event, GridPane chessBoard) {
-        Node node = (Node) event.getSource();
 
+    public void getCoordinates(ActionEvent event, GridPane chessBoard) {
+
+        Node node = (Node) event.getSource();
         if (sourceToTarget == 0) {
             currentNode = node;
             currentRow = toIndex(GridPane.getRowIndex(node));
             currentColumn = toIndex(GridPane.getColumnIndex(node));
 
-            System.out.println(tileMatrix[currentRow][currentColumn].getPiece());
+            System.out.println("first click: " + tileMatrix[currentRow][currentColumn].getPiece());
+
+            Piece.boardLog(tileMatrix);
             if (getTile().getPiece() != null) {
-                allNextMoves();
                 showPath(getTile().getPiece());
+
                 sourceToTarget = 1;
-            }
+            }//else
+//                System.out.println("puece null");
 
         } else {
             targetNode = node;
@@ -282,49 +289,30 @@ public class ChessBoardController {
             getDeltaCoordinates();
             if (targetNode != currentNode) {
                 removePath();
-                if (getTile().getPiece().canMove(destination)) {
-                    System.out.println(tileMatrix[targetRow][targetColumn].getPiece());
-                    move(destination);
+                if (getTile().getPiece() != null) {
+                    if (getTile().getPiece().canMove(destination)) {
+                        System.out.println("last click: " + tileMatrix[targetRow][targetColumn].getPiece());
+                        move(destination);
 
-                    clearNextMoves();
-                    allNextMoves();
+                        fiftyMoves = fiftyMoves + 1;
 
-//                    for (int i = 0; i < 8; i++) {
-//                        for (int j = 0; j < 8; j++) {
-//                            if((tileMatrix[i][j].getPiece() != null) && !(tileMatrix[i][j].getPiece().getNextMoves().isEmpty())){
-//                                for (int k = 0; k < tileMatrix[i][j].getPiece().getNextMoves().size(); k++) {
-//                                    System.out.println("---- " + i + ", " + j + " ----");
-//                                    System.out.println(tileMatrix[i][j].getPiece().getNextMoves().get(k).getRow() + ", " + tileMatrix[i][j].getPiece().getNextMoves().get(k).getColumn());
-//                                }
-//                            }
-//                        }
+                        if (fiftyMoves == 50) {
+//                            System.out.println("empate por 50 movimentos");
+                        }
+//                        System.out.println(fiftyMoves + " - Eggggggggggggggggg");
+                        //  allNextMoves();
 //                    }
-                }
-
-                sourceToTarget = 0;
-
-            } else {
-                sourceToTarget = 0;
-                removePath();
-            }
-        }
-    }
-
-    public void clearNextMoves() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (tileMatrix[i][j].getPiece() != null) {
-                    tileMatrix[i][j].getPiece().getNextMoves().clear();
+                    }
+                    sourceToTarget = 0;
+                } else {
+                    sourceToTarget = 0;
+                    removePath();
                 }
             }
         }
     }
 
     public void move(Coordinate destination) {
-//        chessBoard.getChildren().remove(targetNode);
-//        chessBoard.getChildren().remove(currentNode);
-//        chessBoard.add(currentNode, targetColumn, targetRow);
-
         int targetRow = destination.getRow();
         int targetColumn = destination.getColumn();
 
@@ -334,12 +322,9 @@ public class ChessBoardController {
         tileMatrix[targetRow][targetColumn].getPiece().setWasMoved(true);
         tileMatrix[currentRow][currentColumn] = tile;
 
-        Button button = createNewButton(currentRow, currentColumn);
-        buttonMatrix[targetRow][targetColumn].setGraphic(buttonMatrix[currentRow][currentColumn].getGraphic());
-        buttonMatrix[currentRow][currentColumn] = button;
-
-        System.out.println("movido com sucesso");
-        chessBoard.add(button, currentColumn, currentRow);
+        Button button = buttonMatrix[targetRow][targetColumn];
+        button.setGraphic(buttonMatrix[currentRow][currentColumn].getGraphic());
+        buttonMatrix[currentRow][currentColumn].setGraphic(null);
     }
 
     public void getDeltaCoordinates() {
@@ -352,17 +337,25 @@ public class ChessBoardController {
     }
 
     public void showPath(Piece piece) {
+        //Evitar sobreescrita na variavel quando canBlockCheck mover a peça
+        boolean trueState = piece.wasMoved();
+//        System.out.println("peca antes: " + " -> (" + piece.getCoordinate().getRow() + ", " + piece.getCoordinate().getColumn() + ")  -> " + trueState);
+        piece = piece.clonePiece();
+        piece.setWasMoved(trueState);
+//            piece.setWasMoved(true);
+
+
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Coordinate destination = new Coordinate(i, j);
-                if (piece.canMove(destination)) {
-                    if (!piece.canEat(destination)) {
-                        Button button = createNewButton(0, 0);
-                        button = addPossibleMoves(button);
-                        buttonMatrix[destination.getRow()][destination.getColumn()].setGraphic(button.getGraphic());
-                        buttonMatrix[destination.getRow()][destination.getColumn()].setId("possibleMove");
-                        //buttonMatrix[destination.getRow()][destination.getColumn()].getStyleClass().add("")
-                    }
+                Button button = buttonMatrix[destination.getRow()][destination.getColumn()];
+                if (piece.canEat(destination)) {
+                    button.setId("possibleEatMove");
+                    button.getStyleClass().add("eatBlock");
+                } else if (piece.canMove(destination)) {
+//                    System.out.println("peca depois: " + " -> (" + destination.getRow() + ", " + destination.getColumn() + ")  -> " + piece.wasMoved());
+                    button = addPossibleMoves(button);
+                    button.setId("possibleMove");
                 }
             }
         }
@@ -371,40 +364,46 @@ public class ChessBoardController {
     public void removePath() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if ("possibleMove".equals(buttonMatrix[i][j].getId())) {
-                    buttonMatrix[i][j].setId(null);
-                    buttonMatrix[i][j].setGraphic(null);
+                Button button = buttonMatrix[i][j];
+                if (button.getId() == null)
+                    continue;
+
+                if (button.getId().equals("possibleEatMove")) {
+                    button.getStyleClass().remove("eatBlock");
+                } else if (button.getId().equals("possibleMove")) {
+                    button.setGraphic(null);
                 }
+
+                button.setId(null);
             }
         }
     }
 
-    public void allNextMoves() {
-        Tile[][] auxMatrix = new Tile[8][8];
+    private static Coordinate getKingPosition(int player) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece piece = tileMatrix[i][j].getPiece();
+                if (piece instanceof King && piece.getColor() == player)
+                    return piece.getCoordinate();
+            }
+        }
+        return null;
+    }
 
+    public static boolean isCheck(int player) {
+        Coordinate kingCoordinate = getKingPosition(player);
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                auxMatrix[i][j] = tileMatrix[i][j];
-            }
-        }
+                Piece piece = tileMatrix[i][j].getPiece();
+                if (piece == null || piece.getColor() == player)
+                    continue;
 
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (auxMatrix[i][j].getPiece() != null) {
-                    for (int k = 0; k < 8; k++) {
-                        for (int l = 0; l < 8; l++) {
-                            Coordinate destination = new Coordinate(k, l);
-                            if (auxMatrix[i][j].getPiece().canMove(destination)) {
-                                System.out.println(i + ", " + j + " ----> " + destination.getRow() + ", " + destination.getColumn());
-                                auxMatrix[i][j].getPiece().getNextMoves().add(destination);
-                            }
-                        }
-                    }
-                }
+                if (piece.canEat(kingCoordinate))
+                    return true;
             }
         }
-        System.out.println("\n\n\n\n");
+        return false;
     }
 
     @FXML
@@ -454,7 +453,7 @@ public class ChessBoardController {
     }
 
     @FXML
-    public void onDrawButtonClick(ActionEvent actionEvent){
+    public void onDrawButtonClick(ActionEvent actionEvent) {
         try {
             Stage stage = new Stage();
             FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("views/drawPopUp.fxml"));
@@ -500,4 +499,52 @@ public class ChessBoardController {
 
     }
 
+    @FXML
+    public void onSurrenderButtonClick(ActionEvent actionEvent) {
+        try {
+            Stage stage = new Stage();
+            FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("views/surrenderPopUp.fxml"));
+            Parent parent = fxmlLoader.load();
+            DrawPopUpController drawPopUpController = fxmlLoader.getController();
+            drawPopUpController.setConfirmationListener(new ConfirmationListener() {
+                @Override
+                public void onYesClick() {
+                    //DrawScreenController.boardStageSecond.close();
+                    try {
+                        FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("views/surrenderScreen.fxml"));
+                        Scene scene = new Scene(fxmlLoader.load(), 500, 350);
+
+                        Stage drawStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+                        drawStage.setTitle("VP Chess");
+                        drawStage.setResizable(false);
+                        drawStage.setScene(scene);
+                        drawStage.centerOnScreen();
+                        drawStage.show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            Scene alertPopUp = new Scene(parent, 400, 300);
+
+            Image alertIcon = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("images/alert.png")));
+            stage.getIcons().add(alertIcon);
+
+            stage.setResizable(false);
+            stage.setTitle("ALERT");
+            stage.setScene(alertPopUp);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.showAndWait();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    /*public void showPlayerName(){
+        PlayersNameController.whitePiecePlayer;
+    }*/
 }

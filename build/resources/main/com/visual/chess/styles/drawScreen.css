@@ -1,3 +1,26 @@
 #drawBG{
     -fx-background-color: #F5FCED;
 }
+
+#drawLabel{
+    -fx-text-fill: #314F14;
+    -fx-font-weight: bold;
+    -fx-font-size: 22px;
+}
+
+#exitButton{
+    -fx-border-radius: 12;
+    -fx-background-color: #F5FCEDFF;
+    -fx-text-fill: #314F14;
+    -fx-cursor: pointer;
+    -fx-border-color: #314F14;
+}
+
+#exitButton:hover{
+    -fx-cursor: hand;
+    -fx-border-radius: 12;
+    -fx-background-color: #314F14;
+    -fx-background-radius: 12;
+    -fx-text-fill: white;
+    -fx-border-color: #314F14;
+}

@@ -28,4 +28,19 @@ public class Tile {
     public void setPiece(Piece piece) {
         this.piece = piece;
     }
+
+    public static Tile[][] cloneFrom(Tile[][] board) {
+        Tile[][] newBoard = new Tile[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Tile tile = new Tile();
+                Piece piece = board[i][j].getPiece();
+                if (piece != null)
+                    tile.setPiece(piece.clonePiece());
+                newBoard[i][j] = tile;
+            }
+        }
+
+        return newBoard;
+    }
 }

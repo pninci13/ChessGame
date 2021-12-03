@@ -25,6 +25,7 @@ public class Queen extends Piece {
         if (source.equals(destination)) {
             return false;
         }
+        boolean valid = false;
 
         if (queenCurrentRow == queenTargetRow) {
             if (changeYPosition > 0) {
@@ -37,15 +38,17 @@ public class Queen extends Piece {
                 if (tiles[queenTargetRow][queenTargetColumn].getPiece() != null) {
                     if (tiles[queenCurrentRow][queenCurrentColumn].getPiece().getColor() != tiles[queenTargetRow][queenTargetColumn].getPiece().getColor()) {
                         return true;
+                        /* valid = true;*/
                     } else {
                         return false;
                     }
                 }
-
+                /*valid = true;*/
                 return true;
             }
 
             if (changeYPosition < 0) {
+
                 for (int i = queenCurrentColumn - 1; i > queenTargetColumn; i--) {
                     if (tiles[queenCurrentRow][i].getPiece() != null) {
                         return false;
@@ -55,12 +58,13 @@ public class Queen extends Piece {
                 if (tiles[queenTargetRow][queenTargetColumn].getPiece() != null) {
                     if (tiles[queenCurrentRow][queenCurrentColumn].getPiece().getColor() != tiles[queenTargetRow][queenTargetColumn].getPiece().getColor()) {
                         return true;
+                        /*valid = true;*/
 
                     } else {
                         return false;
                     }
                 }
-
+                /*valid = true;*/
                 return true;
             }
         }
@@ -76,12 +80,12 @@ public class Queen extends Piece {
                 if (tiles[queenTargetRow][queenTargetColumn].getPiece() != null) {
                     if (tiles[queenCurrentRow][queenCurrentColumn].getPiece().getColor() != tiles[queenTargetRow][queenTargetColumn].getPiece().getColor()) {
                         return true;
+                        /*valid = true;*/
 
                     } else {
                         return false;
                     }
                 }
-
                 return true;
             }
 
@@ -95,15 +99,26 @@ public class Queen extends Piece {
                 if (tiles[queenTargetRow][queenTargetColumn].getPiece() != null) {
                     if (tiles[queenCurrentRow][queenCurrentColumn].getPiece().getColor() != tiles[queenTargetRow][queenTargetColumn].getPiece().getColor()) {
                         return true;
+                        /*valid = true;*/
 
                     } else {
                         return false;
                     }
                 }
-
+                /*valid = true;*/
                 return true;
             }
         }
+
+
+        if (valid) {
+            if (ChessBoardController.isCheck(BLACK)) {
+                boolean cb = canBlockCheck(destination);
+                return cb;
+            }
+            return true;
+        }
+
 
         if ((Math.abs(changeXPosition) == Math.abs(changeYPosition))) {
             if (changeXPosition > 0 && changeYPosition > 0) {
@@ -116,6 +131,7 @@ public class Queen extends Piece {
                 if (tiles[queenTargetRow][queenTargetColumn].getPiece() != null) {
                     if (tiles[queenCurrentRow][queenCurrentColumn].getPiece().getColor() != tiles[queenTargetRow][queenTargetColumn].getPiece().getColor()) {
                         return true;
+                        /*valid = true;*/
 
                     } else {
                         return false;
@@ -133,6 +149,7 @@ public class Queen extends Piece {
                 if (tiles[queenTargetRow][queenTargetColumn].getPiece() != null) {
                     if (tiles[queenCurrentRow][queenCurrentColumn].getPiece().getColor() != tiles[queenTargetRow][queenTargetColumn].getPiece().getColor()) {
                         return true;
+                        /*valid = true;*/
 
                     } else {
                         return false;
@@ -150,7 +167,7 @@ public class Queen extends Piece {
                 if (tiles[queenTargetRow][queenTargetColumn].getPiece() != null) {
                     if (tiles[queenCurrentRow][queenCurrentColumn].getPiece().getColor() != tiles[queenTargetRow][queenTargetColumn].getPiece().getColor()) {
                         return true;
-
+                        /*valid = true;*/
                     } else {
                         return false;
                     }
@@ -167,17 +184,31 @@ public class Queen extends Piece {
                 if (tiles[queenTargetRow][queenTargetColumn].getPiece() != null) {
                     if (tiles[queenCurrentRow][queenCurrentColumn].getPiece().getColor() != tiles[queenTargetRow][queenTargetColumn].getPiece().getColor()) {
                         return true;
-
+                        /*valid = true;*/
                     } else {
                         return false;
                     }
                 }
             }
 
-
+            /*valid = true;*/
             return true;
         }
 
+
+        /*if (valid) {
+            if (ChessBoardController.isCheck(BLACK)) {
+                boolean cb = canBlockCheck(destination);
+                return cb;
+            }
+
+            return true;
+        }*/
+        return false;
+    }
+
+    @Override
+    public boolean canMoveToBlock(Coordinate destination) {
         return false;
     }
 
@@ -192,12 +223,16 @@ public class Queen extends Piece {
 
         Tile[][] tiles = ChessBoardController.tileMatrix;
 
-        if (tiles[queenTargetRow][queenTargetColumn].getPiece() != null) {
-            if (tiles[queenCurrentRow][queenCurrentColumn].getPiece().getColor() != tiles[queenTargetRow][queenTargetColumn].getPiece().getColor())
-                return true;
+        if (!canMove(destination)) {
+            return false;
+        }
+
+        if (tiles[queenTargetRow][queenTargetColumn].getPiece() != null && tiles[queenCurrentRow][queenCurrentColumn].getPiece() != null) {
+            if (tiles[queenCurrentRow][queenCurrentColumn].getPiece().canMove(destination))
+                if (tiles[queenCurrentRow][queenCurrentColumn].getPiece().getColor() != tiles[queenTargetRow][queenTargetColumn].getPiece().getColor())
+                    return true;
         }
 
         return false;
     }
-
 }

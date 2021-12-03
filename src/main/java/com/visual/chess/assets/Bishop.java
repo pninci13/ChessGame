@@ -23,38 +23,42 @@ public class Bishop extends Piece {
 
         Tile[][] tiles = ChessBoardController.tileMatrix;
 
-        if (source.equals(destination)) {
+        if (source.equals(destination)){
             return false;
         }
+
+        boolean valid = false;
 
         if ((Math.abs(changeXPosition) == Math.abs(changeYPosition))) {
             if (changeXPosition > 0 && changeYPosition > 0) {
                 for (int i = bishopCurrentRow + 1, j = bishopCurrentColumn + 1; (i < bishopTargetRow) && (j < bishopTargetColumn); i++, j++) {
-                    if (tiles[i][j].getPiece() != null) {
+                    if(tiles[i][j].getPiece() != null){
                         return false;
                     }
                 }
 
-                if (tiles[bishopTargetRow][bishopTargetColumn].getPiece() != null) {
+                if(tiles[bishopTargetRow][bishopTargetColumn].getPiece() != null) {
                     if (tiles[bishopCurrentRow][bishopCurrentColumn].getPiece().getColor() != tiles[bishopTargetRow][bishopTargetColumn].getPiece().getColor()) {
-                        return true;
-
+//                        return true;
+                        valid = true;
                     } else {
                         return false;
                     }
                 }
+
             }
 
             if (changeXPosition > 0 && changeYPosition < 0) {
                 for (int i = bishopCurrentRow + 1, j = bishopCurrentColumn - 1; (i < bishopTargetRow) && (j > bishopTargetColumn); i++, j--) {
-                    if (tiles[i][j].getPiece() != null) {
+                    if(tiles[i][j].getPiece() != null){
                         return false;
                     }
                 }
 
-                if (tiles[bishopTargetRow][bishopTargetColumn].getPiece() != null) {
+                if(tiles[bishopTargetRow][bishopTargetColumn].getPiece() != null) {
                     if (tiles[bishopCurrentRow][bishopCurrentColumn].getPiece().getColor() != tiles[bishopTargetRow][bishopTargetColumn].getPiece().getColor()) {
-                        return true;
+//                        return true;
+                        valid = true;
 
                     } else {
                         return false;
@@ -64,14 +68,15 @@ public class Bishop extends Piece {
 
             if (changeXPosition < 0 && changeYPosition > 0) {
                 for (int i = bishopCurrentRow - 1, j = bishopCurrentColumn + 1; (i > bishopTargetRow) && (j < bishopTargetColumn); i--, j++) {
-                    if (tiles[i][j].getPiece() != null) {
+                    if(tiles[i][j].getPiece() != null){
                         return false;
                     }
                 }
 
-                if (tiles[bishopTargetRow][bishopTargetColumn].getPiece() != null) {
+                if(tiles[bishopTargetRow][bishopTargetColumn].getPiece() != null) {
                     if (tiles[bishopCurrentRow][bishopCurrentColumn].getPiece().getColor() != tiles[bishopTargetRow][bishopTargetColumn].getPiece().getColor()) {
-                        return true;
+//                        return true;
+                        valid = true;
 
                     } else {
                         return false;
@@ -80,30 +85,46 @@ public class Bishop extends Piece {
             }
 
             if (changeXPosition < 0 && changeYPosition < 0) {
+
                 for (int i = bishopCurrentRow - 1, j = bishopCurrentColumn - 1; (i > bishopTargetRow) && (j > bishopTargetColumn); i--, j--) {
-                    if (tiles[i][j].getPiece() != null) {
+                    if(tiles[i][j].getPiece() != null){
                         return false;
                     }
                 }
 
-                if (tiles[bishopTargetRow][bishopTargetColumn].getPiece() != null) {
+                if(tiles[bishopTargetRow][bishopTargetColumn].getPiece() != null) {
                     if (tiles[bishopCurrentRow][bishopCurrentColumn].getPiece().getColor() != tiles[bishopTargetRow][bishopTargetColumn].getPiece().getColor()) {
-                        return true;
+//                        return true;
+                        valid = true;
 
                     } else {
                         return false;
                     }
                 }
             }
+            valid = true;
+//            return true;
+        }
 
+        if (valid) {
+            if (ChessBoardController.isCheck(BLACK)) {
+                boolean cb = canBlockCheck(destination);
+                return cb;
+            }
 
             return true;
         }
+
         return false;
     }
 
     @Override
-    public boolean canEat(Coordinate destination) {
+    public boolean canMoveToBlock(Coordinate destination){
+        return false;
+    }
+
+    @Override
+    public boolean canEat(Coordinate destination){
         int bishopTargetRow = destination.getRow();
         int bishopTargetColumn = destination.getColumn();
 
@@ -113,11 +134,14 @@ public class Bishop extends Piece {
 
         Tile[][] tiles = ChessBoardController.tileMatrix;
 
-        if (tiles[bishopTargetRow][bishopTargetColumn].getPiece() != null) {
-            if (tiles[bishopCurrentRow][bishopCurrentColumn].getPiece().getColor() != tiles[bishopTargetRow][bishopTargetColumn].getPiece().getColor()) {
-                return true;
-            }
+        if (!canMove(destination)){
+            return false;
         }
+
+        if (tiles[bishopTargetRow][bishopTargetColumn].getPiece() != null && tiles[bishopCurrentRow][bishopCurrentColumn].getPiece() != null) {
+            return tiles[bishopCurrentRow][bishopCurrentColumn].getPiece().getColor() != tiles[bishopTargetRow][bishopTargetColumn].getPiece().getColor();
+        }
+
         return false;
     }
 }

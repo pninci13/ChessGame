@@ -3,6 +3,7 @@
     -fx-border-radius: 12;
     -fx-background-color: #F5FCEDFF;
     -fx-cursor: hand;
+    -fx-background-radius: 12;
 }
 
 #drawButton{
@@ -10,6 +11,7 @@
     -fx-border-radius: 12;
     -fx-background-color: #F5FCEDFF;
     -fx-cursor: hand;
+    -fx-background-radius: 12;
 }
 
 #surrenderButton{
@@ -17,4 +19,18 @@
     -fx-border-radius: 12;
     -fx-background-color: #F5FCEDFF;
     -fx-cursor: hand;
+    -fx-background-radius: 12;
 }
+
+#vezDeLabel{
+    -fx-text-fill: #2C3126;
+}
+
+#boardBG {
+    -fx-background-color: #BEC5B6;
+}
+
+#boardBGSecond{
+    -fx-background-color: #BEC5B6;
+}
+

@@ -21,6 +21,7 @@ public class Rook extends Piece {
 
         int changeXPosition = rookTargetRow - rookCurrentRow;
         int changeYPosition = rookTargetColumn - rookCurrentColumn;
+        boolean valid = false;
 
         Tile[][] tiles = ChessBoardController.tileMatrix;
 
@@ -34,13 +35,14 @@ public class Rook extends Piece {
 
                 if (tiles[rookTargetRow][rookTargetColumn].getPiece() != null) {
                     if (tiles[rookCurrentRow][rookCurrentColumn].getPiece().getColor() != tiles[rookTargetRow][rookTargetColumn].getPiece().getColor()) {
-                        return true;
+//                        return true;
+                        valid = true;
                     } else {
                         return false;
                     }
                 }
-
-                return true;
+                valid = true;
+//                return true;
             }
 
             if (changeYPosition < 0) {
@@ -52,14 +54,14 @@ public class Rook extends Piece {
 
                 if (tiles[rookTargetRow][rookTargetColumn].getPiece() != null) {
                     if (tiles[rookCurrentRow][rookCurrentColumn].getPiece().getColor() != tiles[rookTargetRow][rookTargetColumn].getPiece().getColor()) {
-                        return true;
-
+//                        return true;
+                        valid = true;
                     } else {
                         return false;
                     }
                 }
-
-                return true;
+                valid = true;
+//                return true;
             }
         }
 
@@ -73,14 +75,14 @@ public class Rook extends Piece {
 
                 if (tiles[rookTargetRow][rookTargetColumn].getPiece() != null) {
                     if (tiles[rookCurrentRow][rookCurrentColumn].getPiece().getColor() != tiles[rookTargetRow][rookTargetColumn].getPiece().getColor()) {
-                        return true;
-
+//                        return true;
+                        valid = true;
                     } else {
                         return false;
                     }
                 }
-
-                return true;
+                valid = true;
+//                return true;
             }
 
             if (changeXPosition < 0) {
@@ -92,17 +94,33 @@ public class Rook extends Piece {
 
                 if (tiles[rookTargetRow][rookTargetColumn].getPiece() != null) {
                     if (tiles[rookCurrentRow][rookCurrentColumn].getPiece().getColor() != tiles[rookTargetRow][rookTargetColumn].getPiece().getColor()) {
-                        return true;
+//                        return true;
 
                     } else {
                         return false;
                     }
                 }
-
-                return true;
+                valid = true;
+//                return true;
             }
         }
 
+
+        if (valid) {
+            if (ChessBoardController.isCheck(BLACK)) {
+                boolean cb = canBlockCheck(destination);
+                return cb;
+            }
+
+            return true;
+        }
+
+
+        return false;
+    }
+
+    @Override
+    public boolean canMoveToBlock(Coordinate destination) {
         return false;
     }
 
@@ -118,7 +136,12 @@ public class Rook extends Piece {
 
         Tile[][] tiles = ChessBoardController.tileMatrix;
 
-        if (tiles[rookTargetRow][rookTargetColumn].getPiece() != null) {
+        if (!canMove(destination)) {
+            return false;
+        }
+
+        if (tiles[rookTargetRow][rookTargetColumn].getPiece() != null && tiles[rookCurrentRow][rookCurrentColumn].getPiece() != null) {
+//            if(tiles[rookCurrentRow][rookCurrentColumn].getPiece().canMove(destination))
             if (tiles[rookCurrentRow][rookCurrentColumn].getPiece().getColor() != tiles[rookTargetRow][rookTargetColumn].getPiece().getColor())
                 return true;
         }

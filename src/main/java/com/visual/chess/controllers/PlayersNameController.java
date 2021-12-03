@@ -7,12 +7,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class PlayersNameController {
     public Button goBackButton;
+    public TextField player1TextField;
+    public TextField player2TextField;
+    public Button goButton;
+
+    public static String whitePiecePlayer, blackPiecePlayer;
 
     public void mainScreen(ActionEvent actionEvent) throws IOException {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -55,9 +61,16 @@ public class PlayersNameController {
     public void onGoButtonClick(ActionEvent actionEvent) {
         try {
             boardScreen(actionEvent);
+            getPlayersNames();
+            System.out.println(whitePiecePlayer);
+            System.out.println(blackPiecePlayer);
         } catch (IOException exception) {
             exception.printStackTrace();
         }
     }
 
+    public void getPlayersNames(){
+        whitePiecePlayer = player1TextField.getText();
+        blackPiecePlayer = player2TextField.getText();
+    }
 }
