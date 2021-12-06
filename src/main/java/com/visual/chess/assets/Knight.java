@@ -7,6 +7,7 @@ public class Knight extends Piece {
         super(color);
     }
 
+
     @Override
     public boolean canMove(Coordinate destination) {
         int knightCurrentRow, knightCurrentColumn;
@@ -17,15 +18,13 @@ public class Knight extends Piece {
         knightCurrentRow = source.getRow();
         knightCurrentColumn = source.getColumn();
 
-        int changeXPosition = knightTargetRow - knightCurrentRow;
-        int changeYPosition = knightTargetColumn - knightCurrentColumn;
-
         Tile[][] tiles = ChessBoardController.tileMatrix;
 
         int[] XAxis = {-2, -1, +1, +2, +2, +1, -1, -2};
         int[] YAxis = {+1, +2, +2, +1, -1, -2, -2, -1};
-        int knightXMove, knightYMove;
 
+        int knightXMove, knightYMove;
+        boolean valid = false;
 
         for (int i = 0; i < 8; i++) {
             knightXMove = knightCurrentRow + XAxis[i];
@@ -34,20 +33,31 @@ public class Knight extends Piece {
             if ((knightXMove == knightTargetRow) && (knightYMove == knightTargetColumn)) {
                 if (tiles[knightTargetRow][knightTargetColumn].getPiece() != null) {
                     if (tiles[knightTargetRow][knightTargetColumn].getPiece().getColor() != tiles[knightCurrentRow][knightCurrentColumn].getPiece().getColor()) {
-                        return true;
+                        valid = true;
                     } else {
                         return false;
                     }
                 }
-                return true;
+                valid = true;
             }
         }
 
+        if (valid) {
+            if (ChessBoardController.isCheck(getColor())) {
+                boolean cb = canBlockCheck(destination);
+                return cb;
+            }
+
+            if (moveWillThreatKing(destination)) {
+                return false;
+            }
+            return true;
+        }
         return false;
     }
 
     @Override
-    public boolean canMoveToBlock(Coordinate destination){
+    public boolean canMoveToBlock(Coordinate destination) {
         return false;
     }
 
@@ -66,16 +76,50 @@ public class Knight extends Piece {
 
         Tile[][] tiles = ChessBoardController.tileMatrix;
 
-        if (!canMove(destination)){
+        if (!canMoveToEat(destination)) {
             return false;
         }
 
-        if (tiles[knightTargetRow][knightTargetColumn].getPiece() != null) {
+        if (tiles[knightTargetRow][knightTargetColumn].getPiece() != null && tiles[knightCurrentRow][knightCurrentColumn].getPiece() != null) {
             if (tiles[knightTargetRow][knightTargetColumn].getPiece().getColor() != tiles[knightCurrentRow][knightCurrentColumn].getPiece().getColor()) {
                 return true;
             }
         }
+        return false;
+    }
 
+    public boolean canMoveToEat(Coordinate destination) {
+        int knightCurrentRow, knightCurrentColumn;
+        int knightTargetRow = destination.getRow();
+        int knightTargetColumn = destination.getColumn();
+
+        Coordinate source = getCoordinate();
+        knightCurrentRow = source.getRow();
+        knightCurrentColumn = source.getColumn();
+
+        Tile[][] tiles = ChessBoardController.tileMatrix;
+
+        int[] XAxis = {-2, -1, +1, +2, +2, +1, -1, -2};
+        int[] YAxis = {+1, +2, +2, +1, -1, -2, -2, -1};
+
+        int knightXMove, knightYMove;
+        boolean valid = false;
+
+        for (int i = 0; i < 8; i++) {
+            knightXMove = knightCurrentRow + XAxis[i];
+            knightYMove = knightCurrentColumn + YAxis[i];
+
+            if ((knightXMove == knightTargetRow) && (knightYMove == knightTargetColumn)) {
+                if (tiles[knightTargetRow][knightTargetColumn].getPiece() != null) {
+                    if (tiles[knightTargetRow][knightTargetColumn].getPiece().getColor() != tiles[knightCurrentRow][knightCurrentColumn].getPiece().getColor()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
         return false;
     }
 }

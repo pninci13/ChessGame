@@ -6,11 +6,7 @@ public class Tile {
     private Piece piece = null;
 
     public boolean isTileOccupied() {
-        if (getPiece() == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return getPiece() != null;
     }
 
     public Piece getPieceFromTile() {
@@ -40,7 +36,6 @@ public class Tile {
                 newBoard[i][j] = tile;
             }
         }
-
         return newBoard;
     }
 }

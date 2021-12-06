@@ -3,6 +3,7 @@ package com.visual.chess.controllers;
 import com.visual.chess.ChessApplication;
 import com.visual.chess.ConfirmationListener;
 import com.visual.chess.assets.*;
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,20 +17,24 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Timer;
 
 public class ChessBoardController {
 
-    public int currentRow, currentColumn;
-    public static int targetRow, targetColumn, sourceToTarget;
-    public static int changeXPosition, changeYPosition;
     public Label vezDeLabel;
-    public static int fiftyMoves = 0, piecesAmount = 0;
+    public Pane boardBG;
+    public Label columnLabel;
+    public Label playerNameLabel;
+    public Timer timer;
 
     @FXML
     private Button surrenderButton;
@@ -40,14 +45,25 @@ public class ChessBoardController {
     @FXML
     private Button resetButton;
 
+    public int currentRow, currentColumn;
+    public static int targetRow, targetColumn, sourceToTarget;
+    public static int changeXPosition, changeYPosition;
+    public static int pieceColor;
+    public static int fiftyMoves = 4, piecesAmount = 0;
+    public boolean gameFinished = false;
+
+    public static ArrayList<Coordinate> allCheckBlocks = new ArrayList<>();
     Node currentNode, targetNode;
 
     static Button[][] buttonMatrix = new Button[8][8];
     public static Tile[][] tileMatrix = new Tile[8][8];
 
+    public static ArrayList<Coordinate> threatPiecesCoordinate = new ArrayList<>();
+
     @FXML
     public GridPane chessBoard;
 
+    @FXML
     public void initialize() {
         chessBoard.isGridLinesVisible();
 
@@ -66,6 +82,8 @@ public class ChessBoardController {
                 }
             }
         }
+        gameFinished = false;
+        playerNameLabel.setText(PlayersNameController.whitePiecePlayer);
     }
 
     public void whitePieces(int i, int j) {
@@ -256,13 +274,11 @@ public class ChessBoardController {
 
     public void onButtonClick(ActionEvent event) {
         getCoordinates(event, chessBoard);
-//        move(currentNode, targetNode);
-
     }
 
-
     public void getCoordinates(ActionEvent event, GridPane chessBoard) {
-
+        if(outOfMaterial())
+            return;
         Node node = (Node) event.getSource();
         if (sourceToTarget == 0) {
             currentNode = node;
@@ -271,18 +287,25 @@ public class ChessBoardController {
 
             System.out.println("first click: " + tileMatrix[currentRow][currentColumn].getPiece());
 
-            Piece.boardLog(tileMatrix);
-            if (getTile().getPiece() != null) {
-                showPath(getTile().getPiece());
-
-                sourceToTarget = 1;
-            }//else
-//                System.out.println("puece null");
+            if(tileMatrix[currentRow][currentColumn].getPiece() != null) {
+                if (tileMatrix[currentRow][currentColumn].getPiece().getColor() == pieceColor) {
+                    if (getTile().getPiece() != null) {
+                        showPath(getTile().getPiece());
+                        sourceToTarget = 1;
+                    }
+                }
+            }
 
         } else {
             targetNode = node;
             targetRow = toIndex(GridPane.getRowIndex(node));
             targetColumn = toIndex(GridPane.getColumnIndex(node));
+
+            if(currentRow == targetRow && currentColumn == targetColumn){
+                sourceToTarget = 0;
+                removePath();
+                return;
+            }
 
             Coordinate destination = new Coordinate(targetRow, targetColumn);
 
@@ -292,16 +315,54 @@ public class ChessBoardController {
                 if (getTile().getPiece() != null) {
                     if (getTile().getPiece().canMove(destination)) {
                         System.out.println("last click: " + tileMatrix[targetRow][targetColumn].getPiece());
+
+                        boolean hasEaten = false;
+                        boolean isPawn = false;
+
+                        if(tileMatrix[destination.getRow()][destination.getColumn()].getPiece() != null){
+                            hasEaten = true;
+                        }
+
+                        if(tileMatrix[currentRow][currentColumn].getPiece() instanceof Pawn){
+                            isPawn = true;
+                        }
+
                         move(destination);
 
-                        fiftyMoves = fiftyMoves + 1;
-
-                        if (fiftyMoves == 50) {
-//                            System.out.println("empate por 50 movimentos");
+                        if(hasEaten || isPawn){
+                            fiftyMoves = 4;
+                        }else{
+                            fiftyMoves--;
+                            if(fiftyMoves == 0){
+                                gameFinished = true;
+                                fiftyMovesPopUp();
+                            }
                         }
-//                        System.out.println(fiftyMoves + " - Eggggggggggggggggg");
-                        //  allNextMoves();
-//                    }
+
+                        if(outOfMaterial()) {
+                            gameFinished = true;
+                            outOfMaterialPopUp();
+                        }
+
+                        if(pieceColor == Piece.WHITE){
+                            playerNameLabel.setText(PlayersNameController.blackPiecePlayer);
+                            pieceColor = Piece.BLACK;
+                        }else{
+                            pieceColor = Piece.WHITE;
+                            playerNameLabel.setText(PlayersNameController.whitePiecePlayer);
+                        }
+
+                        if(isCheck(pieceColor)){
+                            if(!isValidMovement(pieceColor)){
+                                gameFinished = true;
+                                checkMatePopUp();
+                            }
+                        }else{
+                            if(!isValidMovement(pieceColor)){
+                                gameFinished = true;
+                                stalematePopUp();
+                            }
+                        }
                     }
                     sourceToTarget = 0;
                 } else {
@@ -337,13 +398,7 @@ public class ChessBoardController {
     }
 
     public void showPath(Piece piece) {
-        //Evitar sobreescrita na variavel quando canBlockCheck mover a peça
-        boolean trueState = piece.wasMoved();
-//        System.out.println("peca antes: " + " -> (" + piece.getCoordinate().getRow() + ", " + piece.getCoordinate().getColumn() + ")  -> " + trueState);
         piece = piece.clonePiece();
-        piece.setWasMoved(trueState);
-//            piece.setWasMoved(true);
-
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -353,7 +408,6 @@ public class ChessBoardController {
                     button.setId("possibleEatMove");
                     button.getStyleClass().add("eatBlock");
                 } else if (piece.canMove(destination)) {
-//                    System.out.println("peca depois: " + " -> (" + destination.getRow() + ", " + destination.getColumn() + ")  -> " + piece.wasMoved());
                     button = addPossibleMoves(button);
                     button.setId("possibleMove");
                 }
@@ -392,6 +446,8 @@ public class ChessBoardController {
 
     public static boolean isCheck(int player) {
         Coordinate kingCoordinate = getKingPosition(player);
+        if(kingCoordinate == null)
+            return false;
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -404,6 +460,29 @@ public class ChessBoardController {
             }
         }
         return false;
+    }
+
+    public boolean isValidMovement(int player) {
+        int pieceBlockAmount = 0;
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(tileMatrix[i][j].getPiece() != null) {
+                    if(tileMatrix[i][j].getPiece().getColor() == player) {
+                        for (int k = 0; k < 8; k++) {
+                            for (int l = 0; l < 8; l++) {
+                                Coordinate destination = new Coordinate(k,l);
+                                if(tileMatrix[i][j].getPiece().canMove(destination)){
+                                    pieceBlockAmount++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return pieceBlockAmount != 0;
     }
 
     @FXML
@@ -544,7 +623,172 @@ public class ChessBoardController {
         }
     }
 
-    /*public void showPlayerName(){
-        PlayersNameController.whitePiecePlayer;
-    }*/
+    public boolean outOfMaterial(){
+        int blackPawns = 0, whitePawns = 0;
+        int blackRook = 0, whiteRook = 0;
+        int blackBishop = 0, whiteBishop = 0;
+        int blackKnight = 0, whiteKnight = 0;
+        int queens = 0, kings = 0;
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(tileMatrix[i][j].getPiece() == null)
+                    continue;
+
+                if(tileMatrix[i][j].getPiece() instanceof King){
+                    kings++;
+                }
+
+                if(tileMatrix[i][j].getPiece() instanceof Queen){
+                    queens++;
+                }
+
+                if(tileMatrix[i][j].getPiece() instanceof Bishop){
+                    if(tileMatrix[i][j].getPiece().getColor() == Piece.WHITE)  {
+                        whiteBishop++;
+                    }else{
+                        blackBishop++;
+                    }
+                }
+
+                if(tileMatrix[i][j].getPiece() instanceof Rook){
+                    if(tileMatrix[i][j].getPiece().getColor() == Piece.WHITE)  {
+                        whiteRook++;
+                    }else{
+                        blackRook++;
+                    }
+                }
+
+                if(tileMatrix[i][j].getPiece() instanceof Knight){
+                    if(tileMatrix[i][j].getPiece().getColor() == Piece.WHITE)  {
+                        whiteKnight++;
+                    }else{
+                        blackKnight++;
+                    }
+                }
+
+                if(tileMatrix[i][j].getPiece() instanceof Pawn){
+                    if(tileMatrix[i][j].getPiece().getColor() == Piece.WHITE)  {
+                        whitePawns++;
+                    }else{
+                        blackPawns++;
+                    }
+                }
+            }
+        }
+
+        int sumOfKnights = blackKnight + whiteKnight;
+        int sumOfRooks = blackRook + whiteRook;
+        int sumOfPawns = blackPawns + whitePawns;
+        int sumOfBishop = blackBishop + whiteBishop;
+
+        if(kings != 0 && sumOfBishop == 0 && sumOfKnights == 0 && sumOfPawns == 0 && sumOfRooks == 0 && queens == 0)
+            return true;
+
+        if(kings != 0 && sumOfKnights == 0 && sumOfPawns == 0 && sumOfRooks == 0 && queens == 0 &&
+                ((blackBishop == 1 && whiteBishop == 0) || (blackBishop == 0 && whiteBishop == 1)))
+            return true;
+
+        if(kings != 0 && sumOfBishop == 0 && sumOfPawns == 0 && sumOfRooks == 0 && queens == 0 &&
+                ((blackKnight == 1 && whiteKnight == 0) || (blackKnight == 0 && whiteKnight == 1)))
+            return true;
+
+        return false;
+    }
+
+    public void checkMatePopUp(){
+        try {
+            Stage stage = new Stage();
+            FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("views/checkmatePopUp.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 500, 350);
+            Image chessIcon = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("images/icon.png")));
+
+            stage.getIcons().add(chessIcon);
+            stage.setResizable(false);
+            stage.setTitle("VP Chess");
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.show();
+
+            PauseTransition delay = new PauseTransition(Duration.seconds(5));
+            delay.setOnFinished( event -> stage.close());
+            delay.play();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void stalematePopUp(){
+        try {
+            Stage stage = new Stage();
+            FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("views/stalematePopUp.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 500, 350);
+            Image chessIcon = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("images/icon.png")));
+
+            stage.getIcons().add(chessIcon);
+            stage.setResizable(false);
+            stage.setTitle("VP Chess");
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.show();
+
+            PauseTransition delay = new PauseTransition(Duration.seconds(5));
+            delay.setOnFinished( event -> stage.close());
+            delay.play();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void fiftyMovesPopUp(){
+        try {
+            Stage stage = new Stage();
+            FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("views/fiftyMovesPopUp.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 500, 350);
+            Image chessIcon = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("images/icon.png")));
+
+            stage.getIcons().add(chessIcon);
+            stage.setResizable(false);
+            stage.setTitle("VP Chess");
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.show();
+
+            PauseTransition delay = new PauseTransition(Duration.seconds(5));
+            delay.setOnFinished( event -> stage.close());
+            delay.play();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void outOfMaterialPopUp(){
+        try {
+            Stage stage = new Stage();
+            FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("views/outOfMaterialPopUp.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 500, 350);
+            Image chessIcon = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("images/icon.png")));
+
+            stage.getIcons().add(chessIcon);
+            stage.setResizable(false);
+            stage.setTitle("VP Chess");
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.show();
+
+            PauseTransition delay = new PauseTransition(Duration.seconds(5));
+            delay.setOnFinished( event -> stage.close());
+            delay.play();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
 }

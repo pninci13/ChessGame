@@ -7,6 +7,7 @@ public class Pawn extends Piece {
         super(color);
     }
 
+
     @Override
     public boolean canMove(Coordinate destination) {
         int pawnTargetRow = destination.getRow();
@@ -15,10 +16,12 @@ public class Pawn extends Piece {
         Coordinate source = getCoordinate();
         int pawnCurrentRow = source.getRow();
         int pawnCurrentColumn = source.getColumn();
+
         int changeXPosition = pawnTargetRow - pawnCurrentRow;
         int changeYPosition = pawnTargetColumn - pawnCurrentColumn;
 
         Tile[][] tiles = ChessBoardController.tileMatrix;
+
         int i = 1;
 
         Piece piece = tiles[pawnCurrentRow][pawnCurrentColumn].getPiece();
@@ -26,10 +29,7 @@ public class Pawn extends Piece {
         if (piece == null || source.equals(destination))
             return false;
 
-//        boolean backwardMovement = (changeXPosition  < 0);
-
         if (piece.getColor() == Piece.WHITE) {
-//            backwardMovement = (changeXPosition > 0);
             i = -1;
         }
 
@@ -42,7 +42,6 @@ public class Pawn extends Piece {
                 if (Math.abs(changeXPosition) == 1 && ((changeYPosition == 1) || (changeYPosition == -1))) {
                     if ((tiles[pawnCurrentRow][pawnCurrentColumn].getPiece() != null) && (tiles[pawnTargetRow][pawnTargetColumn].getPiece() != null)) {
                         if ((tiles[pawnCurrentRow][pawnCurrentColumn].getPiece().getColor() != tiles[pawnTargetRow][pawnTargetColumn].getPiece().getColor())) {
-//                            setWasMoved(true);
                             valid = true;
                         }
                     }
@@ -50,12 +49,10 @@ public class Pawn extends Piece {
 
                 if ((Math.abs(changeXPosition) <= 2 && changeYPosition == 0) && (tiles[pawnCurrentRow + 2 * i][pawnCurrentColumn].getPiece() == null)) {
                     if (tiles[pawnCurrentRow + i][pawnCurrentColumn].getPiece() == null) {
-//                        setWasMoved(true);
                         valid = true;
                     }
                 } else if (tiles[pawnCurrentRow + 2 * i][pawnCurrentColumn].getPiece() != null) {
                     if ((Math.abs(changeXPosition) <= 1 && changeYPosition == 0) && (tiles[pawnCurrentRow + i][pawnCurrentColumn].getPiece() == null)) {
-//                        setWasMoved(true);
                         valid = true;
                     }
 
@@ -76,20 +73,18 @@ public class Pawn extends Piece {
             }
         }
 
+
         if (valid) {
-            if (ChessBoardController.isCheck(BLACK)) {
+            if (ChessBoardController.isCheck(getColor())) {
                 boolean cb = canBlockCheck(destination);
-//                if (cb) {
-//                    System.out.println("PODE BLOQUEAR VADIA -> (" + destination.getRow() + ", " + destination.getColumn() + ")");
-//                } else {
-//                    System.out.println("PODE BLOQUEAR NAO -> (" + destination.getRow() + ", " + destination.getColumn() + ")");
-//                }
                 return cb;
             }
 
+            if (moveWillThreatKing(destination)) {
+                return false;
+            }
             return true;
         }
-
         return false;
     }
 

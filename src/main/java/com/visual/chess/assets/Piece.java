@@ -1,6 +1,9 @@
 package com.visual.chess.assets;
+
 import com.visual.chess.controllers.ChessBoardController;
+
 import java.util.ArrayList;
+
 import static com.visual.chess.controllers.ChessBoardController.tileMatrix;
 
 public abstract class Piece {
@@ -9,6 +12,7 @@ public abstract class Piece {
     public static final int WHITE = 0;
     private Coordinate coordinate;
     private boolean wasMoved = false;
+    private boolean canBlock = false;
 
     private ArrayList<Coordinate> nextMoves = new ArrayList<>();
     private ArrayList<Coordinate> getThreatMoves = new ArrayList<>();
@@ -17,11 +21,11 @@ public abstract class Piece {
         this.color = color;
     }
 
-    public static void boardLog(Tile[][] board){
+    public static void boardLog(Tile[][] board) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Piece piece = board[i][j].getPiece();
-                if (piece == null){
+                if (piece == null) {
                     System.out.print("    -    ");
                     continue;
                 }
@@ -38,45 +42,66 @@ public abstract class Piece {
                     pieceLetter = "+";
                 else if (piece instanceof Queen)
                     pieceLetter = "Q";
-                System.out.print(pieceLetter+ piece.getCoordinate().getRow() + piece.getCoordinate().getColumn() + piece.wasMoved() + " ");
+                System.out.print(pieceLetter + piece.getCoordinate().getRow() + piece.getCoordinate().getColumn() + piece.getCanBlock() + " ");
             }
             System.out.println("");
         }
     }
 
-    public boolean canBlockCheck(Coordinate destination){
-        System.out.println("----- Tile Matrix -----");
-        boardLog(tileMatrix);
-        System.out.println("");
-        System.out.println("");
+    public boolean getCanBlock() {
+        return canBlock;
+    }
+
+    public void setCanBlock(boolean canBlock) {
+        this.canBlock = canBlock;
+    }
+
+    public boolean canBlockCheck(Coordinate destination) {
         Tile[][] currentBoard = Tile.cloneFrom(tileMatrix);
-        System.out.println("----- Current Board -----");
-        boardLog(currentBoard);
 
         int sourceRow = getCoordinate().getRow();
         int sourceColumn = getCoordinate().getColumn();
 
         Piece piece = tileMatrix[sourceRow][sourceColumn].getPiece();
+
+        if (piece == null) {
+            return false;
+        }
+
         tileMatrix[destination.getRow()][destination.getColumn()].setPiece(piece);
 
         piece.setCoordinate(destination.getRow(), destination.getColumn());
         piece.setWasMoved(true);
         tileMatrix[sourceRow][sourceColumn].setPiece(null);
 
-//        System.out.println("APOS MUDANCA");
-//        boardLog(tileMatrix);
+        boolean isCheck = ChessBoardController.isCheck(getColor());
+
+        tileMatrix = currentBoard;
+        return !isCheck;
+    }
+
+    public boolean moveWillThreatKing(Coordinate destination) {
+        Tile[][] currentBoard = Tile.cloneFrom(tileMatrix);
+
+        int sourceRow = getCoordinate().getRow();
+        int sourceColumn = getCoordinate().getColumn();
+
+        Piece piece = tileMatrix[sourceRow][sourceColumn].getPiece();
+
+        if (piece == null) {
+            return false;
+        }
+
+        tileMatrix[destination.getRow()][destination.getColumn()].setPiece(piece);
+
+        piece.setCoordinate(destination.getRow(), destination.getColumn());
+        piece.setWasMoved(true);
+        tileMatrix[sourceRow][sourceColumn].setPiece(null);
 
         boolean isCheck = ChessBoardController.isCheck(getColor());
 
         tileMatrix = currentBoard;
-//        System.out.println("\nAPOS RECOVERY");
-//        boardLog(tileMatrix); //TODO essa board log pode ser util mantenha salvo
-
-        return !isCheck;
-    }
-
-    public void setGetThreatMoves(ArrayList<Coordinate> getThreatMoves) {
-        this.getThreatMoves = getThreatMoves;
+        return isCheck;
     }
 
     public boolean wasMoved() {

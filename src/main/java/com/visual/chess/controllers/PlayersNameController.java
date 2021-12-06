@@ -59,11 +59,9 @@ public class PlayersNameController {
 
     @FXML
     public void onGoButtonClick(ActionEvent actionEvent) {
+        getPlayersNames();
         try {
             boardScreen(actionEvent);
-            getPlayersNames();
-            System.out.println(whitePiecePlayer);
-            System.out.println(blackPiecePlayer);
         } catch (IOException exception) {
             exception.printStackTrace();
         }
