@@ -27,7 +27,7 @@ Here are some tips for you to have the best experience.
    <ul>
       <li><strong>Reset :</strong> Start over the game</li>
       <li><strong>Draw :</strong> If both players agree to make the game a draw</li>
-      <li><strong>Surrender :</strong> If any of the players decide to surrende the game</li>
+      <li><strong>Surrender :</strong> If any of the players decide to surrender the game</li>
     </ul>
   </li>
   <li>In case of any kind of draw, it will show up a popup from what type of draw that happened and after that you'll need to reset the game.</li>
