@@ -1,0 +1,52 @@
+#resetButton{
+    -fx-border-color: #314F14;
+    -fx-border-radius: 12;
+    -fx-background-color: #F5FCEDFF;
+    -fx-cursor: hand;
+    -fx-background-radius: 12;
+}
+
+#drawButton{
+    -fx-border-color: #314F14;
+    -fx-border-radius: 12;
+    -fx-background-color: #F5FCEDFF;
+    -fx-cursor: hand;
+    -fx-background-radius: 12;
+}
+
+#surrenderButton{
+    -fx-border-color: #314F14;
+    -fx-border-radius: 12;
+    -fx-background-color: #F5FCEDFF;
+    -fx-cursor: hand;
+    -fx-background-radius: 12;
+}
+
+#vezDeLabel{
+    -fx-text-fill: #2C3126;
+}
+
+#boardBG {
+    -fx-background-color: #BEC5B6;
+}
+
+#boardBGSecond{
+    -fx-background-color: #BEC5B6;
+}
+
+#columnLabel{
+    -fx-text-fill: #314F14;
+    -fx-font-weight: bold;
+}
+
+#eightLabel, #sevenLabel, #sixLabel, #fiveLabel, #fourLabel, #threeLabel, #twoLabel, #oneLabel{
+    -fx-text-fill: #314F14;
+    -fx-font-weight: bold;
+}
+
+.eatBlock {
+    -fx-border-color: #656865;
+    -fx-border-radius: 50px;
+    -fx-alignment: center;
+    -fx-border-width: 4px;
+}

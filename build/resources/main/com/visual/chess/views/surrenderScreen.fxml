@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane fx:id="drawBG" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.2"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.visual.chess.controllers.DrawScreenController">
+    <children>
+        <Label fx:id="drawLabel" alignment="CENTER" layoutX="130.0" layoutY="101.0" text="PLAYER SURRENDERED"/>
+        <Button fx:id="exitButton" alignment="CENTER" layoutX="195.0" layoutY="198.0" mnemonicParsing="false"
+                onAction="#onExitButtonClick" prefHeight="40.0" prefWidth="100.0" text="Exit"/>
+    </children>
+
+    <stylesheets>
+        <URL value="@../styles/drawScreen.css"/>
+    </stylesheets>
+</Pane>

@@ -1,8 +1,8 @@
-.bg-color{
+.bg-color {
     -fx-background-color: #F5FCED;
 }
 
-#playButton{
+#playButton {
     -fx-border-radius: 12;
     -fx-background-color: #F5FCEDFF;
     -fx-text-fill: #314F14;
@@ -10,7 +10,7 @@
     -fx-border-color: #314F14;
 }
 
-#playButton:hover{
+#playButton:hover {
     -fx-cursor: hand;
     -fx-border-radius: 12;
     -fx-background-color: #314F14;
@@ -19,7 +19,7 @@
     -fx-border-color: #314F14;
 }
 
-#goButton{
+#goButton {
     -fx-border-radius: 12;
     -fx-background-color: #F5FCEDFF;
     -fx-text-fill: #314F14;
@@ -27,7 +27,7 @@
     -fx-border-color: #314F14;
 }
 
-#goButton:hover{
+#goButton:hover {
     -fx-cursor: hand;
     -fx-border-radius: 12;
     -fx-background-color: #314F14;
@@ -36,17 +36,35 @@
     -fx-border-color: #314F14;
 }
 
-.textFields{
+.textFields {
     -fx-border-radius: 12;
     -fx-background-color: #F5FCED;
     -fx-border-color: #314F14;
 }
-.labels{
+
+.labels {
     -fx-font-weight: bold;
     -fx-text-fill: #314F14;
 }
 
+#goBackButton {
+    -fx-background-color: transparent;
+    -fx-border-radius: 4;
+    -fx-border-style: dashed;
+    -fx-border-color: #314F14;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+    -fx-text-fill: #314F14;
+}
 
+#goBackButton:hover {
+    -fx-background-color: #314F14;
+    -fx-border-radius: 4;
+    -fx-border-color: #314F14;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
 
 
 

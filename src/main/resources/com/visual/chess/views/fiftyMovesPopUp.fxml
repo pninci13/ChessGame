@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane prefHeight="350.0" prefWidth="500.0" styleClass="popUpBG" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.visual.chess.controllers.CheckmateScreenController">
+    <children>
+        <Label layoutX="129.0" layoutY="39.0" prefHeight="79.0" prefWidth="243.0" text="50 MOVES REACHED&#10;GAME OVER" textAlignment="CENTER">
+            <font>
+                <Font name="Roboto Light" size="25.0" />
+            </font>
+        </Label>
+        <ImageView fitHeight="108.0" fitWidth="115.0" layoutX="189.0" layoutY="157.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../images/fifty.png" />
+        </ImageView>
+        <ImageView fitHeight="70.0" fitWidth="63.0" layoutX="266.0" layoutY="198.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../images/fiftyPawn.png" />
+        </ImageView>
+        <ImageView fitHeight="79.0" fitWidth="63.0" layoutX="158.0" layoutY="198.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../images/fiftyPawn.png" />
+        </ImageView>
+    </children>
+
+    <stylesheets>
+        <URL value="@../styles/endGamePopUps.css" />
+    </stylesheets>
+</Pane>

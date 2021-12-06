@@ -7,6 +7,8 @@ module com.visual.chess {
     exports com.visual.chess;
     opens com.visual.chess.controllers to javafx.fxml;
     exports com.visual.chess.controllers;
+    opens com.visual.chess.assets to javafx.fxml;
+    exports com.visual.chess.assets;
 
 //    opens com.visual.chess.controllers to javafx.fxml;
 //    exports com.visual.chess.controllers;
