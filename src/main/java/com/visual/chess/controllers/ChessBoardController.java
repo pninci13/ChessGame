@@ -49,7 +49,7 @@ public class ChessBoardController {
     public static int targetRow, targetColumn, sourceToTarget;
     public static int changeXPosition, changeYPosition;
     public static int pieceColor;
-    public static int fiftyMoves = 4, piecesAmount = 0;
+    public static int fiftyMoves = 100, piecesAmount = 0;
     public boolean gameFinished = false;
 
     public static ArrayList<Coordinate> allCheckBlocks = new ArrayList<>();
@@ -330,7 +330,7 @@ public class ChessBoardController {
                         move(destination);
 
                         if(hasEaten || isPawn){
-                            fiftyMoves = 4;
+                            fiftyMoves = 100;
                         }else{
                             fiftyMoves--;
                             if(fiftyMoves == 0){
