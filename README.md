@@ -15,7 +15,7 @@ Before you run check if your machine attend these requirements:
 
 To play the chess, follow the steps below:
 
-1. Download the project from the main branch version or from release (v1.2.0) **(Final Release)**.
+1. Download the project from the main branch version or from release (v1.2.2) **(Final Release)**.
 2. Open the files as a project in you prefered IDE.
 3. Run the game :)
 
